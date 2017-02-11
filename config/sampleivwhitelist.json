@@ -1,0 +1,10 @@
+{
+  "DefaultMinIV": 100,
+  "MinIV": {
+    "Lapras": 0,
+    "Snorlax": 0,
+    "Dragonite": 0,
+    "Dragonair": 0,
+    "Dratini": 0
+  }
+}

@@ -1,0 +1,8 @@
+{
+	"OutputWebhookURL": "https://discordapp.com/api/webhooks/270787184242589706/NqNXi8OJXupPk3CDyEVS81SVrwBE-o7oD4yuAfaX79VqRawvrEB6pcg9nlaTKT8oekn6",
+	"NamesJSONURL": "https://cdn.rawgit.com/HarmonicDissonance/Assets/7f719cb6/names/en.json",
+	"MovesJSONURL": "https://cdn.rawgit.com/HarmonicDissonance/Assets/7f719cb6/moves/en.json",
+	"NormalThumbnailURLTemplate": "https://cdn.rawgit.com/HarmonicDissonance/Assets/5d45cb06/normal/%d.png",
+	"ShinyThumbnailURLTemplate": "https://cdn.rawgit.com/HarmonicDissonance/Assets/5d45cb06/shiny/%d.png",
+  "Port": 30004
+}
