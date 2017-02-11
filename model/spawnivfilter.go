@@ -2,30 +2,30 @@ package model
 
 import (
 	"encoding/json"
-	"os"
 	"errors"
+	"os"
 )
 
 type IVFilter struct {
-  defaultIV int
-  idToIV map[int]int
+	defaultIV int
+	idToIV    map[int]int
 }
 
-func (f IVFilter) Filter (spawn Spawn) bool {
-  minIV, ok := f.idToIV[spawn.NameID]
-  if !ok {
-    minIV = f.defaultIV
-  }
-  return spawn.IVPercent() < minIV
+func (f IVFilter) Filter(spawn Spawn) bool {
+	minIV, ok := f.idToIV[spawn.NameID]
+	if !ok {
+		minIV = f.defaultIV
+	}
+	return spawn.IVPercent() < minIV
 }
 
 func LoadFilter(pathToFilterJSON string, nameProvider NameProvider) (filter IVFilter, err error) {
-  var rawIVFilter struct {
+	var rawIVFilter struct {
 		DefaultMinIV int
-		MinIV map[string]int
+		MinIV        map[string]int
 	}
 
-  fd, err := os.Open(pathToFilterJSON)
+	fd, err := os.Open(pathToFilterJSON)
 	decoder := json.NewDecoder(fd)
 	err = decoder.Decode(&rawIVFilter)
 
@@ -40,5 +40,5 @@ func LoadFilter(pathToFilterJSON string, nameProvider NameProvider) (filter IVFi
 		filter.idToIV[id] = iv
 	}
 
-  return
+	return
 }

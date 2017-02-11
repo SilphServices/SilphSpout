@@ -16,12 +16,12 @@ type Cache struct {
 func (cache *Cache) GetAndSet(key string) (found bool) {
 	cache.mutex.Lock()
 	item, exists := cache.items[key]
-  found = exists && !item.expired()
-  if (!found) {
-    item := &Item{}
-    item.touch(cache.ttl)
-    cache.items[key] = item
-  }
+	found = exists && !item.expired()
+	if !found {
+		item := &Item{}
+		item.touch(cache.ttl)
+		cache.items[key] = item
+	}
 	cache.mutex.Unlock()
 	return
 }

@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"os"
 	//"time"
-	"fmt"
-	"flag"
-	"log"
-	"strconv"
 	"bytes"
-	"net/http"
-	"net/http/httputil"
+	"flag"
+	"fmt"
 	"github.com/SilphServices/SilphSpout/config"
 	"github.com/SilphServices/SilphSpout/formatter"
-	"github.com/SilphServices/SilphSpout/webhook"
 	"github.com/SilphServices/SilphSpout/model"
+	"github.com/SilphServices/SilphSpout/webhook"
+	"log"
+	"net/http"
+	"net/http/httputil"
+	"strconv"
 )
 
 func loadConfig(pathToConfigJSON string) (config config.Config, err error) {
@@ -48,20 +48,20 @@ func main() {
 	}
 
 	poster := webhook.NewPoster(config.OutputWebhookURL)
-/*
-	spawn := model.Spawn {
-		NameID: 493,
-		Move1ID: 1,
-		Move2ID: 2,
-		IVAttack: 15,
-		IVDefense: 14,
-		IVStamina: 13,
-		DespawnUnixSeconds: int64(time.Now().Unix() + 10),
-		Latitude: 46.851648,
-		Longitude: -121.761186,
-		IsShiny: false,
-	}
-*/
+	/*
+		spawn := model.Spawn {
+			NameID: 493,
+			Move1ID: 1,
+			Move2ID: 2,
+			IVAttack: 15,
+			IVDefense: 14,
+			IVStamina: 13,
+			DespawnUnixSeconds: int64(time.Now().Unix() + 10),
+			Latitude: 46.851648,
+			Longitude: -121.761186,
+			IsShiny: false,
+		}
+	*/
 	dedupe := model.NewDedupeFilter()
 
 	discordFormatter := formatter.NewDiscordEmbedFormatter(config.NormalThumbnailURLTemplate, config.ShinyThumbnailURLTemplate, nameProvider)
@@ -80,11 +80,11 @@ func main() {
 		log.Print("Got new POST body: " + buf.String())
 
 		decoder := json.NewDecoder(buf)
-		spawns := make([]model.Spawn,0)
+		spawns := make([]model.Spawn, 0)
 		err = decoder.Decode(&spawns)
 		if err != nil {
-				log.Print("Failed to decode " + err.Error())
-				return
+			log.Print("Failed to decode " + err.Error())
+			return
 		}
 
 		for _, spawn := range spawns {
