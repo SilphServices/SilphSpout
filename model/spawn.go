@@ -4,17 +4,21 @@ import (
 	"math"
 )
 
+type MoveIV struct {
+	Move1ID            int     `json:"m1"`
+	Move2ID            int     `json:"m2"`
+	Attack           int     `json:"atk"`
+	Defense          int     `json:"def"`
+	Stamina          int     `json:"sta"`
+}
+
 type Spawn struct {
 	EncounterID        int64   `json:"eid"`
 	SpawnID            string  `json:"sid"`
 	NameID             int     `json:"pid"`
-	Move1ID            int     `json:"move1_id"`
-	Move2ID            int     `json:"move2_id"`
-	IVAttack           int     `json:"iv_attack"`
-	IVDefense          int     `json:"iv_defense"`
-	IVStamina          int     `json:"iv_stamina"`
+	IVs				   MoveIV  `json:"ivs"`
 	TimeToHide         int64   `json:"tth"`
-	DespawnUnixSeconds int64   `json:"despawn_unix_seconds"`
+	DespawnUnixSeconds int64   `json:"dts"`
 	Latitude           float64 `json:"lat"`
 	Longitude          float64 `json:"lon"`
 	IsShiny            bool    `json:"is_shiny"`
@@ -22,13 +26,14 @@ type Spawn struct {
 
 func (spawn Spawn) HasIV() bool {
 	// No way to set default values to a -1 flag, so check for the presence of moves.
-	return spawn.Move1ID > 0
+	return spawn.IVs.Move1ID > 0
 }
 
 func (s Spawn) IVPercent() int {
 	if !s.HasIV() {
 		return -1
 	}
-	percentFloat := float64((s.IVAttack+s.IVDefense+s.IVStamina)*100) / 45
+	ivs := s.IVs
+	percentFloat := float64((ivs.Attack+ivs.Defense+ivs.Stamina)*100) / 45
 	return int(math.Floor(percentFloat + .5))
 }

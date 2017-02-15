@@ -34,18 +34,16 @@ func (formatter DiscordEmbed) Format(spawn model.Spawn) (message discord.Message
 		embedDescription = "**Shiny**\n"
 	}
 
-	if spawn.Move1ID >= 0 && spawn.Move2ID >= 0 {
-		move1String := formatter.nameProvider.GetMove(spawn.Move1ID)
-		move2String := formatter.nameProvider.GetMove(spawn.Move2ID)
-		embedDescription = embedDescription + move1String + ", " + move2String
-	}
-
 	embedTitle := nameString
 	if spawn.HasIV() {
+		move1String := formatter.nameProvider.GetMove(spawn.IVs.Move1ID)
+		move2String := formatter.nameProvider.GetMove(spawn.IVs.Move2ID)
+		embedDescription = embedDescription + move1String + ", " + move2String
+
 		percent := spawn.IVPercent()
 		embed.Color = ivPercentToColor(percent)
 
-		ivString := fmt.Sprintf(`%d%% (%d/%d/%d)`, percent, spawn.IVAttack, spawn.IVDefense, spawn.IVStamina)
+		ivString := fmt.Sprintf(`%d%% (%d/%d/%d)`, percent, spawn.IVs.Attack, spawn.IVs.Defense, spawn.IVs.Stamina)
 		embedTitle = embedTitle + " " + ivString
 	}
 	embed.Title = embedTitle
