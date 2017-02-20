@@ -29,6 +29,8 @@ func (poster Poster) Post(object interface{}) {
 	jsonBuf := bytes.NewBuffer(jsonBytes)
 
 	resp, err := poster.client.Post(poster.url, "application/json", jsonBuf)
-	defer resp.Body.Close()
+	if resp.Body != nil {
+		defer resp.Body.Close()
+	}
 	log.Println(resp.Status)
 }
