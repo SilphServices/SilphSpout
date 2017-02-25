@@ -4,6 +4,7 @@ type OutputConfig struct {
 	Service    string
 	WebhookURL string
 	FilterPath string
+	FencePath  string
 }
 
 type Config struct {

@@ -1,0 +1,21 @@
+{
+	"OutputWebhookURL": "https://discordapp.com/api/webhooks/274201481249292289/t_B4SncPbnr9deq8o3COsJhriKM8qAJ-I9HemgH2znqfar54vaTE2TIG8JEKwU27W-9W",
+	"NamesJSONURL": "https://cdn.rawgit.com/HarmonicDissonance/Assets/7f719cb6/names/en.json",
+	"MovesJSONURL": "https://cdn.rawgit.com/HarmonicDissonance/Assets/7f719cb6/moves/en.json",
+	"NormalThumbnailURLTemplate": "https://cdn.rawgit.com/HarmonicDissonance/Assets/5d45cb06/normal/%d.png",
+	"ShinyThumbnailURLTemplate": "https://cdn.rawgit.com/HarmonicDissonance/Assets/5d45cb06/shiny/%d.png",
+  "Port": 30004,
+  "Outputs": [
+         {
+            "Service": "discord",
+            "WebhookURL": "https://discordapp.com/api/webhooks/REMAINING_WEBHOOK_URL1",
+						"FilterPath": "config/ivFilter.json"
+        },
+        {
+            "Service": "discord",
+            "WebhookURL": "https://discordapp.com/api/webhooks/REMAINING_WEBHOOK_URL2",
+						"FencePath": "config/brentwood.json",
+            "FilterPath": "config/ivFilter_fenced.json"
+        }
+    ]
+}
