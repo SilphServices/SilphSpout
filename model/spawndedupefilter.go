@@ -25,16 +25,16 @@ func (f DedupeFilter) Filter(spawn Spawn) bool {
 
 func hashSpawn(spawn Spawn) string {
 	/*
-	  digest := md5.New()
-	  idString := strconv.Itoa(spawn.NameID)
-	  latString := strconv.FormatFloat(spawn.Latitude, 'f', -1, 64)
-		lngString := strconv.FormatFloat(spawn.Longitude, 'f', -1, 64)
+		  digest := md5.New()
+		  idString := strconv.Itoa(spawn.NameID)
+		  latString := strconv.FormatFloat(spawn.Latitude, 'f', -1, 64)
+			lngString := strconv.FormatFloat(spawn.Longitude, 'f', -1, 64)
 
-	  io.WriteString(digest, idString)
-	  io.WriteString(digest, latString)
-	  io.WriteString(digest, lngString)
-	  hash := digest.Sum(nil)
-	  return string(hash[:])
+		  io.WriteString(digest, idString)
+		  io.WriteString(digest, latString)
+		  io.WriteString(digest, lngString)
+		  hash := digest.Sum(nil)
+		  return string(hash[:])
 	*/
 	return fmt.Sprintf("%d", spawn.EncounterID)
 }

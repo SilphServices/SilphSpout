@@ -27,6 +27,7 @@ func loadConfig(pathToConfigJSON string) (config config.Config, err error) {
 
 type Output struct {
 	filter model.IVFilter
+	fence  model.Geofence
 	poster webhook.Poster
 }
 
@@ -83,8 +84,21 @@ func main() {
 			log.Fatal(err)
 		}
 
+		//var Gfence model.Geofence
+		log.Print("Output " + num + ": Loading GeoFence " + outconfig.FencePath)
+		Gfence, err := model.LoadFence(outconfig.FencePath)
+		if err != nil {
+			log.Print("Output " + num + ": Couldn't load GeoFence. It's probably in the wrong spot or formatted incorrectly.")
+			log.Fatal(err)
+		}
+
+		if len(Gfence.FencePoints) > 0 {
+			log.Println("Points for GeoFence " + num + ": " + Gfence.FenceName)
+			log.Print(Gfence.FencePoints)
+		}
 		output := Output{
 			filter: ivFilter,
+			fence:  Gfence,
 			poster: webhook.NewPoster(outconfig.WebhookURL),
 		}
 		outputs[i] = output
@@ -128,7 +142,9 @@ func main() {
 			for i, output := range outputs {
 				log.Print(fmt.Sprintf("Posting to webhook: " + strconv.Itoa(i)))
 
-				if output.filter.Filter(spawn) {
+				if output.fence.CheckFence(spawn) {
+					log.Print("Filtered by GeoFence.")
+				} else if output.filter.Filter(spawn) {
 					log.Print("Filtered for low IV.")
 				} else {
 					output.poster.Post(message)
