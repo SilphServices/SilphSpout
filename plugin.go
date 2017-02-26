@@ -84,21 +84,25 @@ func main() {
 			log.Fatal(err)
 		}
 
-		//var Gfence model.Geofence
-		log.Print("Output " + num + ": Loading GeoFence " + outconfig.FencePath)
-		Gfence, err := model.LoadFence(outconfig.FencePath)
-		if err != nil {
-			log.Print("Output " + num + ": Couldn't load GeoFence. It's probably in the wrong spot or formatted incorrectly.")
-			log.Fatal(err)
+		var geofence model.Geofence
+		if outconfig.FencePath != "" {
+			log.Print("Output " + num + ": Loading GeoFence " + outconfig.FencePath)
+			geofence, err := model.LoadFence(outconfig.FencePath)
+			if err != nil {
+				log.Print("Output " + num + ": Couldn't load GeoFence. It's probably in the wrong spot or formatted incorrectly.")
+				log.Fatal(err)
+			}
+
+			if len(geofence.FencePoints) > 0 {
+				log.Println("Output " + num + ": Loaded GeoFence " + geofence.FenceName + " with " + strconv.Itoa(len(geofence.FencePoints)) + " points.")
+			}
+		} else {
+			geofence = model.AcceptAllGeofence {}
 		}
 
-		if len(Gfence.FencePoints) > 0 {
-			log.Println("Points for GeoFence " + num + ": " + Gfence.FenceName)
-			log.Print(Gfence.FencePoints)
-		}
 		output := Output{
 			filter: ivFilter,
-			fence:  Gfence,
+			fence:  geofence,
 			poster: webhook.NewPoster(outconfig.WebhookURL),
 		}
 		outputs[i] = output
@@ -142,8 +146,8 @@ func main() {
 			for i, output := range outputs {
 				log.Print(fmt.Sprintf("Posting to webhook: " + strconv.Itoa(i)))
 
-				if output.fence.CheckFence(spawn) {
-					log.Print("Filtered by GeoFence.")
+				if !output.fence.Inside(spawn) {
+					log.Print("Outside GeoFence " + output.fence.Name())
 				} else if output.filter.Filter(spawn) {
 					log.Print("Filtered for low IV.")
 				} else {

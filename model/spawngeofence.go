@@ -6,12 +6,32 @@ import (
 	"os"
 )
 
-type Geofence struct {
+type Geofence interface {
+	Name () string
+	Inside (spawn Spawn) bool
+}
+
+type GeofenceImpl struct {
 	FenceName   string
 	FencePoints [][]float64
 }
 
-func (gf Geofence) CheckFence(spawn Spawn) bool {
+type AcceptAllGeofence struct {
+}
+
+func (gf AcceptAllGeofence) Inside(spawn Spawn) bool {
+	return true
+}
+
+func (gf AcceptAllGeofence) Name() string {
+	return "Accept All"
+}
+
+func (gf GeofenceImpl) Name() string {
+	return gf.FenceName
+}
+
+func (gf GeofenceImpl) Inside(spawn Spawn) bool {
 	if len(gf.FencePoints) == 0 {
 		return false
 	} //If there is no fence just return all is good
@@ -35,10 +55,10 @@ func (gf Geofence) CheckFence(spawn Spawn) bool {
 		}
 	}
 
-	return !inside
+	return inside
 }
 
-func LoadFence(pathToFenceJSON string) (GFence Geofence, err error) {
+func LoadFence(pathToFenceJSON string) (geofence GeofenceImpl, err error) {
 
 	if pathToFenceJSON == "" {
 		return
@@ -48,12 +68,12 @@ func LoadFence(pathToFenceJSON string) (GFence Geofence, err error) {
 		fmt.Print(err)
 	}
 	decoder := json.NewDecoder(fd)
-	err = decoder.Decode(&GFence)
+	err = decoder.Decode(&geofence)
 
 	//Check to see if the Fence is actually closed, if not close it
-	n := len(GFence.FencePoints)
-	if GFence.FencePoints[0][0] != GFence.FencePoints[n-1][0] || GFence.FencePoints[0][1] != GFence.FencePoints[n-1][1] {
-		GFence.FencePoints = append(GFence.FencePoints, GFence.FencePoints[0])
+	n := len(geofence.FencePoints)
+	if geofence.FencePoints[0][0] != geofence.FencePoints[n-1][0] || geofence.FencePoints[0][1] != geofence.FencePoints[n-1][1] {
+		geofence.FencePoints = append(geofence.FencePoints, geofence.FencePoints[0])
 	}
 
 	return
